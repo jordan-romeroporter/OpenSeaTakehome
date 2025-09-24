@@ -1,0 +1,380 @@
+# Portfolio App - Engineering Constitution (.cursorrules)
+
+## 🎯 Project Context
+This is an iOS portfolio app demonstrating Staff-level engineering practices. Built with SwiftUI, Clean Architecture, and MVVM-Coordinator pattern. The codebase prioritizes developer velocity, team scalability, and production excellence.
+
+## 🏗 Architecture Rules
+
+### Layer Separation
+```
+Domain Layer (Pure Business Logic)
+    ↓ depends on nothing
+Data Layer (Services & Repositories)  
+    ↓ depends on Domain
+Presentation Layer (Views & ViewModels)
+    ↓ depends on Domain
+Coordinator Layer (Navigation)
+    ↓ orchestrates Presentation
+```
+
+### Domain Layer Rules
+- **NO** UIKit/SwiftUI imports
+- **NO** external dependencies
+- **YES** pure Swift only
+- **YES** immutable models
+- **YES** protocol boundaries
+
+### Data Layer Rules
+- **ALWAYS** use protocols for services
+- **ALWAYS** async/await for async operations
+- **NEVER** expose implementation details
+- **NEVER** use singletons
+
+### Presentation Layer Rules
+- **ViewModels** must be `@MainActor`
+- **Views** must be pure, no business logic
+- **ALWAYS** use `@StateObject` for ViewModel ownership
+- **NEVER** call services directly from Views
+
+## 💻 Code Style Mandates
+
+### Naming Conventions
+```swift
+// ✅ CORRECT
+struct PortfolioView: View { }
+final class PortfolioViewModel: ObservableObject { }
+protocol PortfolioService { }
+final class PortfolioServiceImpl: PortfolioService { }
+
+// ❌ WRONG
+struct Portfolio: View { }  // Missing 'View' suffix
+class PortfolioVM { }  // Use full 'ViewModel'
+class PortfolioServiceManager { }  // Don't use 'Manager'
+```
+
+### Async/Await Pattern
+```swift
+// ✅ CORRECT - Modern Swift Concurrency
+func fetchData() async throws -> Model {
+    try await service.fetch()
+}
+
+// ❌ WRONG - Old completion handlers
+func fetchData(completion: @escaping (Result<Model, Error>) -> Void) {
+    // Don't use this pattern
+}
+```
+
+### Dependency Injection
+```swift
+// ✅ CORRECT - Constructor injection
+final class ViewModel {
+    private let service: ServiceProtocol
+    
+    init(service: ServiceProtocol) {
+        self.service = service
+    }
+}
+
+// ❌ WRONG - Singleton pattern
+class ServiceManager {
+    static let shared = ServiceManager()  // NEVER do this
+}
+```
+
+### Error Handling
+```swift
+// ✅ CORRECT - Typed errors with recovery
+enum FeatureError: LocalizedError {
+    case networkFailure
+    
+    var errorDescription: String? {
+        NSLocalizedString("error.network", comment: "")
+    }
+    
+    var recoverySuggestion: String? {
+        NSLocalizedString("error.network.recovery", comment: "")
+    }
+}
+
+// ❌ WRONG - Generic errors
+throw NSError(domain: "", code: 0)  // Too generic
+```
+
+## 🧪 Testing Requirements
+
+### Use Swift Testing for New Tests
+```swift
+// ✅ CORRECT - Modern Swift Testing
+import Testing
+
+@Suite("Feature Tests")
+struct FeatureTests {
+    @Test("Validates input correctly")
+    func validateInput() {
+        #expect(validator.isValid("test") == true)
+    }
+}
+
+// ⚠️ Use XCTest only for complex async scenarios
+import XCTest
+
+class ComplexAsyncTests: XCTestCase {
+    func test_complexAsync() async throws {
+        // Only when Swift Testing doesn't suffice
+    }
+}
+```
+
+### Mock Pattern
+```swift
+// ✅ CORRECT - Protocol-based mocking
+class MockService: ServiceProtocol {
+    var mockResult: Result<Model, Error>?
+    
+    func fetch() async throws -> Model {
+        switch mockResult {
+        case .success(let model): return model
+        case .failure(let error): throw error
+        case .none: throw TestError.notConfigured
+        }
+    }
+}
+```
+
+## ♿️ Accessibility Mandates
+
+### Every UI Element Must Be Accessible
+```swift
+// ✅ CORRECT
+Text("Balance: \(amount)")
+    .accessibilityLabel("Account balance: \(formattedAmount)")
+    .accessibilityHint("Double tap to see transaction history")
+
+// ❌ WRONG
+Text("Balance: \(amount)")  // Missing accessibility
+```
+
+### Group Related Content
+```swift
+// ✅ CORRECT
+VStack {
+    Text(title)
+    Text(subtitle)
+}
+.accessibilityElement(children: .combine)
+.accessibilityLabel("\(title), \(subtitle)")
+```
+
+## 🌍 Internationalization
+
+### All Strings Must Be Localized
+```swift
+// ✅ CORRECT
+Text(NSLocalizedString("welcome.title", comment: "Welcome screen title"))
+
+// ❌ WRONG  
+Text("Welcome")  // Hard-coded string
+```
+
+### Format Numbers and Dates
+```swift
+// ✅ CORRECT
+let formatter = NumberFormatter()
+formatter.numberStyle = .currency
+Text(formatter.string(from: amount) ?? "")
+
+// ❌ WRONG
+Text("$\(amount)")  // Assumes USD and US formatting
+```
+
+## 🔒 Security Rules
+
+### API Key Management
+```swift
+// ✅ CORRECT
+let apiKey = Bundle.main.object(forInfoDictionaryKey: "APIKey") as? String
+
+// ❌ WRONG
+let apiKey = "sk_live_abc123"  // NEVER hardcode
+```
+
+### Sensitive Data
+```swift
+// ✅ CORRECT - Use Keychain
+KeychainService.store(token, for: "authToken")
+
+// ❌ WRONG - UserDefaults for sensitive data
+UserDefaults.standard.set(token, forKey: "authToken")
+```
+
+## 📊 Performance Standards
+
+### Required Metrics
+- App launch: <1 second
+- Screen transitions: 60fps
+- Memory baseline: <50MB
+- Network timeout: 30 seconds
+- Image cache: 100MB max
+
+### Optimization Patterns
+```swift
+// ✅ CORRECT - Lazy loading
+LazyVStack {
+    ForEach(items) { item in
+        ItemRow(item: item)
+    }
+}
+
+// ❌ WRONG - Loading everything
+VStack {
+    ForEach(items) { item in
+        ItemRow(item: item)
+    }
+}
+```
+
+## 🔄 Git Workflow
+
+### Commit Message Format
+```
+<type>: <subject>
+
+<body>
+
+<footer>
+```
+
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`
+
+### Branch Naming
+- `feature/` - New features
+- `fix/` - Bug fixes  
+- `chore/` - Maintenance
+- `docs/` - Documentation only
+
+## 📝 Documentation Requirements
+
+### Public APIs Must Have Documentation
+```swift
+/// Fetches portfolio data for the given wallet address
+/// - Parameter address: Ethereum wallet address (0x...)
+/// - Returns: Portfolio containing tokens and NFTs
+/// - Throws: `NetworkError` if request fails
+public func fetchPortfolio(for address: String) async throws -> Portfolio {
+    // Implementation
+}
+```
+
+### Complex Logic Needs Explanation
+```swift
+// Calculate weighted average price
+// Formula: Σ(price × quantity) / Σ(quantity)
+// Handles edge case where total quantity is zero
+```
+
+## 🚀 AI Assistant Instructions
+
+When generating code for this project:
+
+1. **Always follow the architecture patterns** - Don't break layer boundaries
+2. **Use modern Swift patterns** - async/await, Swift Testing, property wrappers
+3. **Include accessibility** - Every UI element must be accessible
+4. **Write testable code** - Dependency injection, protocols, pure functions
+5. **Consider performance** - Lazy loading, caching, efficient algorithms
+6. **Add documentation** - Public APIs and complex logic
+7. **Localize strings** - No hardcoded user-facing text
+8. **Handle errors gracefully** - Typed errors with recovery suggestions
+
+## 🎯 Code Generation Templates
+
+### New Feature Module
+When creating a new feature, generate all layers:
+1. Domain models (pure Swift structs)
+2. Service protocols and implementations  
+3. ViewModels with `@Published` properties
+4. SwiftUI Views with accessibility
+5. Coordinator for navigation
+6. Unit tests using Swift Testing
+7. UI test example
+
+### New Service
+```swift
+protocol [Feature]Service: AnyObject {
+    func fetch() async throws -> [Model]
+}
+
+final class [Feature]ServiceImpl: [Feature]Service {
+    private let networkService: NetworkService
+    
+    init(networkService: NetworkService) {
+        self.networkService = networkService
+    }
+    
+    func fetch() async throws -> [Model] {
+        // Implementation
+    }
+}
+```
+
+### New ViewModel
+```swift
+@MainActor
+final class [Feature]ViewModel: ObservableObject {
+    @Published private(set) var state: ViewState = .idle
+    @Published var model: [Model]?
+    
+    enum ViewState {
+        case idle, loading, loaded, error(Error)
+    }
+    
+    private let service: [Feature]Service
+    
+    init(service: [Feature]Service) {
+        self.service = service
+    }
+    
+    func load() async {
+        state = .loading
+        do {
+            model = try await service.fetch()
+            state = .loaded
+        } catch {
+            state = .error(error)
+        }
+    }
+}
+```
+
+## 📋 Review Checklist
+
+Before approving any code:
+- [ ] Follows architecture patterns
+- [ ] Has appropriate tests
+- [ ] Includes accessibility labels
+- [ ] Strings are localized
+- [ ] No hardcoded values
+- [ ] Errors handled gracefully
+- [ ] Documentation complete
+- [ ] Performance considered
+
+## 🚨 Red Flags to Avoid
+
+1. **Force unwrapping** - Use if-let or guard
+2. **Synchronous network calls** - Always async
+3. **Massive views** - Break into components
+4. **Business logic in views** - Move to ViewModel
+5. **Missing error handling** - Always handle failures
+6. **Hardcoded strings** - Must be localized
+7. **Singletons** - Use dependency injection
+8. **God objects** - Single responsibility principle
+9. **Untested code** - Minimum 70% coverage
+10. **Inaccessible UI** - Must support VoiceOver
+
+---
+
+**Version**: 1.0.0
+**Last Updated**: 2024
+**Maintained By**: iOS Platform Team
+
+This is our engineering constitution. When in doubt, refer to these principles. They are not suggestions - they are requirements for maintaining a Staff-level codebase.

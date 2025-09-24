@@ -1,0 +1,309 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld items" : {
+
+    },
+    "accessibility.balance" : {
+      "comment" : "Balance: %@",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balance: %@"
+          }
+        }
+      }
+    },
+    "accessibility.loading" : {
+      "comment" : "Loading portfolio",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading portfolio"
+          }
+        }
+      }
+    },
+    "accessibility.network_selector" : {
+      "comment" : "Network selector"
+    },
+    "accessibility.nft_collection" : {
+      "comment" : "NFT Collection: %@",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NFT Collection: %@"
+          }
+        }
+      }
+    },
+    "accessibility.token_name" : {
+      "comment" : "Token: %@",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Token: %@"
+          }
+        }
+      }
+    },
+    "accessibility.wallet_input" : {
+      "comment" : "Wallet address input",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wallet address input"
+          }
+        }
+      }
+    },
+    "button.load" : {
+      "comment" : "Load",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load"
+          }
+        }
+      }
+    },
+    "button.ok" : {
+      "comment" : "OK",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "button.retry" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
+          }
+        }
+      }
+    },
+    "error.decoding" : {
+      "comment" : "Decoding error: %@",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to process data: %@"
+          }
+        }
+      }
+    },
+    "error.http" : {
+      "comment" : "HTTP error: %d",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server error: %d"
+          }
+        }
+      }
+    },
+    "error.invalid_address" : {
+      "comment" : "Invalid wallet address",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid wallet address"
+          }
+        }
+      }
+    },
+    "error.invalid_address.recovery" : {
+      "comment" : "Please enter a valid Ethereum address (0x...)",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a valid Ethereum address (0x...)"
+          }
+        }
+      }
+    },
+    "error.invalid_url" : {
+      "comment" : "Invalid URL",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid URL"
+          }
+        }
+      }
+    },
+    "error.no_data" : {
+      "comment" : "No data received",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No data received"
+          }
+        }
+      }
+    },
+    "error.recovery.default" : {
+      "comment" : "Please try again",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please try again"
+          }
+        }
+      }
+    },
+    "error.recovery.network" : {
+      "comment" : "Check your internet connection",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check your internet connection"
+          }
+        }
+      }
+    },
+    "error.recovery.rate_limit" : {
+      "comment" : "Too many requests. Please try again later",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Too many requests. Please try again later"
+          }
+        }
+      }
+    },
+    "error.title" : {
+      "comment" : "Error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        }
+      }
+    },
+    "portfolio.address_label" : {
+      "comment" : "Wallet Address",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wallet Address"
+          }
+        }
+      }
+    },
+    "portfolio.address_placeholder" : {
+      "comment" : "0x...",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0x..."
+          }
+        }
+      }
+    },
+    "portfolio.empty_state.message" : {
+      "comment" : "This wallet doesn't have any tokens or NFTs",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This wallet doesn't have any tokens or NFTs"
+          }
+        }
+      }
+    },
+    "portfolio.empty_state.title" : {
+      "comment" : "No Assets Found",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Assets Found"
+          }
+        }
+      }
+    },
+    "portfolio.invalid_address" : {
+      "comment" : "Please enter a valid Ethereum address",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a valid Ethereum address"
+          }
+        }
+      }
+    },
+    "portfolio.network_label" : {
+      "comment" : "Network",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETH Mainnet"
+          }
+        }
+      }
+    },
+    "portfolio.nft_section" : {
+      "comment" : "NFT Collections",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NFT Collections"
+          }
+        }
+      }
+    },
+    "portfolio.title" : {
+      "comment" : "Portfolio",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portfolio"
+          }
+        }
+      }
+    },
+    "portfolio.tokens_section" : {
+      "comment" : "Tokens",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tokens"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
