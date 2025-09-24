@@ -23,17 +23,23 @@ if ! command -v swiftlint >/dev/null 2>&1; then
     fi
 fi
 
-CONFIG_FILE="$PROJECT_DIR/Config.xcconfig"
+CONFIG_FILE="$PROJECT_DIR/Configuration/Secrets.xcconfig"
 
 printf '%s\n' "🔐 Setting up API key configuration..."
-cat <<'CONFIG' > "$CONFIG_FILE"
+if [ -f "$CONFIG_FILE" ]; then
+    echo "🔁 Secrets file already exists at $CONFIG_FILE (skipping creation)"
+else
+    mkdir -p "$(dirname "$CONFIG_FILE")"
+    cat <<'CONFIG' > "$CONFIG_FILE"
 // Configuration file for API keys
-// Add this file to .gitignore!
+// Add this file to version control ignore rules!
 ALCHEMY_API_KEY = your_api_key_here
 CONFIG
+    echo "✅ Created $CONFIG_FILE"
+fi
 
 GITIGNORE_FILE="$PROJECT_DIR/.gitignore"
-for pattern in "Config.xcconfig" "*.xcconfig"; do
+for pattern in "Configuration/Secrets.xcconfig" "*.xcconfig"; do
     if [ -f "$GITIGNORE_FILE" ] && grep -qxF "$pattern" "$GITIGNORE_FILE"; then
         continue
     fi
@@ -78,8 +84,8 @@ cat <<'OUTRO'
 ✅ Setup complete!
 
 📋 Next steps:
-  1. Add your Alchemy API key to Config.xcconfig
-  2. Open Portfolio.xcodeproj in Xcode
+  1. Add your Alchemy API key to Configuration/Secrets.xcconfig
+  2. Open OpenSeaTakehome.xcodeproj in Xcode
   3. Build and run (⌘R)
 
 🔑 Get your API key at: https://dashboard.alchemy.com/

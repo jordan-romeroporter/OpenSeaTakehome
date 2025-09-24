@@ -1,5 +1,7 @@
 # Portfolio iOS App
 
+Note: I have a Scripts dir, which is more of an example of how I'd scaffold a project. If you are willing to try them out please check out the commit-ai.sh file, this is something I use personally on all projects to expedite creating commits and following consistent conventions. 
+
 ## 🚀 Quick Start
 
 1. **Clone repository**
@@ -13,7 +15,7 @@
    ```
 3. **Configure API key**
    ```bash
-   echo "ALCHEMY_API_KEY = your_key_here" > Secrets.xcconfig
+   echo "ALCHEMY_API_KEY = your_key_here" > Configuration/Secrets.xcconfig
    ```
 4. **Open in Xcode**
    ```bash
