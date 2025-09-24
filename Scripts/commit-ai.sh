@@ -1,77 +1,126 @@
 #!/bin/bash
 
-# AI-powered commit message generator following conventions
-
-set -euo pipefail
-
-RED='\033[0;31m'
+# Colors for better visibility (optional but nice)
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-NC='\033[0m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
-if ! command -v jq >/dev/null 2>&1; then
-    echo -e "${RED}❌ jq is required but not installed${NC}"
-    echo "Install jq (brew install jq) and try again."
+echo -e "${YELLOW}🔍 Checking for staged changes...${NC}"
+# Check if there are staged changes
+if [ -z "$(git diff --staged)" ]; then
+    echo -e "${RED}❌ No staged changes found. Please stage some changes first.${NC}"
+    exit 1
+fi
+echo -e "${GREEN}✓ Found staged changes${NC}"
+
+echo -e "${YELLOW}🔧 Checking Claude Code installation...${NC}"
+# Check if claude command exists
+if ! command -v claude &> /dev/null; then
+    echo -e "${RED}❌ Claude Code is not installed or not in PATH${NC}"
+    exit 1
+fi
+echo -e "${GREEN}✓ Claude Code is available${NC}"
+
+echo -e "${YELLOW}📝 Getting staged diff...${NC}"
+# Get the staged diff with file names
+DIFF=$(git diff --staged)
+FILES_CHANGED=$(git diff --staged --name-only)
+echo -e "${GREEN}✓ Captured diff ($(echo "$DIFF" | wc -l) lines)${NC}"
+echo -e "${GREEN}✓ Files changed: $(echo "$FILES_CHANGED" | wc -l)${NC}"
+
+echo -e "${YELLOW}🤖 Asking Claude to generate commit message...${NC}"
+echo -e "${YELLOW}   This may take a few seconds...${NC}"
+
+# Enhanced prompt for more detailed commit messages
+COMMIT_MSG=$(echo "Review this git diff and generate a comprehensive multi-line conventional commit message.
+
+IMPORTANT REQUIREMENTS:
+1. Start with ONE main conventional commit type (feat/fix/docs/style/refactor/test/chore/perf) that represents the primary change
+2. Format: 'type(scope): brief description' for the first line (keep under 72 chars)
+3. Leave a blank line after the first line
+4. Then provide a detailed body with:
+   - A brief paragraph explaining the overall change
+   - A bulleted list of ALL individual changes, grouped by type if multiple types exist
+   - Each bullet should be specific and mention the file/component affected
+   - Use format like: '- feat: added user authentication to login.js'
+   - Include ALL changes, even minor ones
+5. Be comprehensive - I want to be able to understand what changed without looking at the diff
+6. If there are breaking changes, add 'BREAKING CHANGE:' section at the end
+
+Files changed:
+$FILES_CHANGED
+
+Diff:
+$DIFF
+
+Output ONLY the commit message in the exact format requested, nothing else. No explanations, no markdown code blocks, just the commit message itself." | claude 2>&1)
+
+# Check if Claude returned an error
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Error: Failed to generate commit message${NC}"
+    echo -e "${RED}Claude output: $COMMIT_MSG${NC}"
     exit 1
 fi
 
-if ! command -v curl >/dev/null 2>&1; then
-    echo -e "${RED}❌ curl is required but not installed${NC}"
-    exit 1
-fi
-
-if [ -z "${OPENAI_API_KEY-}" ]; then
-    echo -e "${RED}❌ OPENAI_API_KEY environment variable not set${NC}"
-    exit 1
-fi
-
-STAGED_DIFF=$(git diff --staged)
-
-if [ -z "$STAGED_DIFF" ]; then
-    echo -e "${RED}❌ No staged changes found${NC}"
-    echo "Please stage your changes first: git add <files>"
-    exit 1
-fi
-
-PROMPT="Based on these git changes, generate a conventional commit message.
-Use format: <type>: <description>
-Types: feat, fix, docs, style, refactor, test, chore, perf
-Keep description under 50 chars.
-Be specific about what changed.
-
-Changes:
-$STAGED_DIFF"
-
-echo -e "${YELLOW}🤖 Analyzing changes...${NC}"
-
-COMMIT_MSG=$(curl -s https://api.openai.com/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
-  -d "{\
-    \"model\": \"gpt-3.5-turbo\",\
-    \"messages\": [{\"role\": \"user\", \"content\": \"$PROMPT\"}],\
-    \"max_tokens\": 100\
-  }" | jq -r '.choices[0].message.content // empty')
-
+# Check if commit message is empty
 if [ -z "$COMMIT_MSG" ]; then
-    echo -e "${RED}❌ Failed to generate commit message${NC}"
+    echo -e "${RED}❌ Error: Generated commit message is empty${NC}"
     exit 1
 fi
 
-echo -e "${GREEN}✅ Generated commit message:${NC}"
-echo "$COMMIT_MSG"
+echo -e "${GREEN}✓ Commit message generated successfully${NC}"
 echo ""
-read -r -p "Use this commit message? (y/n/e to edit): " CHOICE
+echo -e "${GREEN}📋 Generated commit message:${NC}"
+echo -e "${YELLOW}------------------------${NC}"
+echo "$COMMIT_MSG"
+echo -e "${YELLOW}------------------------${NC}"
+echo ""
 
-case "$CHOICE" in
-    y|Y )
+# Count lines in commit message for feedback
+LINE_COUNT=$(echo "$COMMIT_MSG" | wc -l)
+echo -e "${GREEN}📊 Message details: $LINE_COUNT lines${NC}"
+echo ""
+
+# Ask for confirmation with options
+echo -e "${GREEN}Options:${NC}"
+echo -e "  ${YELLOW}y${NC} - Use this commit message"
+echo -e "  ${YELLOW}e${NC} - Edit the message before committing"
+echo -e "  ${YELLOW}r${NC} - Regenerate the message"
+echo -e "  ${YELLOW}n${NC} - Cancel"
+read -p "$(echo -e ${GREEN}Your choice: ${NC})" -n 1 -r CHOICE
+echo
+
+case $CHOICE in
+    [Yy])
+        echo -e "${YELLOW}💾 Creating commit...${NC}"
         git commit -m "$COMMIT_MSG"
-        echo -e "${GREEN}✅ Committed successfully!${NC}"
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}✨ Commit created successfully!${NC}"
+        else
+            echo -e "${RED}❌ Error: Failed to create commit${NC}"
+            exit 1
+        fi
         ;;
-    e|E )
-        git commit -e -m "$COMMIT_MSG"
+    [Ee])
+        echo -e "${YELLOW}📝 Opening editor for commit message...${NC}"
+        # Save to temp file and open in git's default editor
+        TEMP_FILE=$(mktemp)
+        echo "$COMMIT_MSG" > "$TEMP_FILE"
+        git commit -e -F "$TEMP_FILE"
+        rm "$TEMP_FILE"
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}✨ Commit created successfully with edits!${NC}"
+        else
+            echo -e "${RED}❌ Error: Failed to create commit or commit was cancelled${NC}"
+            exit 1
+        fi
         ;;
-    * )
-        echo "Commit cancelled"
+    [Rr])
+        echo -e "${YELLOW}🔄 Regenerating...${NC}"
+        exec "$0"
+        ;;
+    *)
+        echo -e "${YELLOW}❌ Commit cancelled${NC}"
         ;;
 esac
