@@ -1,7 +1,5 @@
 # Portfolio iOS App
 
-Staff-level iOS architecture demonstration with developer velocity tools and scalable patterns.
-
 ## 🚀 Quick Start
 
 1. **Clone repository**
