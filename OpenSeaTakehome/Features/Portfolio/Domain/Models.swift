@@ -1,7 +1,5 @@
 import Foundation
 
-// swiftlint:disable file_length nesting
-
 // MARK: - Request Models
 struct TokensRequest: Encodable {
     let addresses: [AddressNetworkPair]

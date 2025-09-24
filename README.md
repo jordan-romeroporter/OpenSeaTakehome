@@ -27,7 +27,6 @@ Note: I have a Scripts dir, which is more of an example of how I'd scaffold a pr
 ### Prerequisites
 
 - Xcode command-line tools
-- SwiftLint (`brew install swiftlint`)
 - Claude CLI (`pip install anthropic` or download from Anthropic) with a configured `ANTHROPIC_API_KEY`
 
 ### Install Command Aliases

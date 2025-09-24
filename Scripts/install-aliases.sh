@@ -64,8 +64,6 @@ alias pf-run="cd $PROJECT_DIR && xcodebuild -scheme Portfolio -destination 'plat
 
 # Advanced commands
 alias pf-coverage="cd $PROJECT_DIR && xcodebuild test -scheme Portfolio -enableCodeCoverage YES"
-alias pf-lint="cd $PROJECT_DIR && swiftlint"
-alias pf-format="cd $PROJECT_DIR && swiftlint --fix"
 alias pf-profile="cd $PROJECT_DIR && instruments -t 'Time Profiler' -D profile.trace"
 
 # Git helpers
@@ -98,9 +96,7 @@ pf-clean     - Clean build
 pf-run       - Build and run in simulator
 pf-coverage  - Generate test coverage
 
-Code Quality:
-pf-lint      - Run SwiftLint
-pf-format    - Auto-fix linting issues
+Performance:
 pf-profile   - Run performance profiler
 
 Git Workflow:
