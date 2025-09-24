@@ -6,14 +6,24 @@ struct EmptyStateView: View {
             Image(systemName: "tray")
                 .font(.system(size: 64))
                 .foregroundColor(.secondary)
-            
-            Text(NSLocalizedString("portfolio.empty_state.title", comment: "No Assets Found"))
-                .font(.headline)
-            
-            Text(NSLocalizedString("portfolio.empty_state.message", comment: "This wallet doesn't have any tokens or NFTs"))
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+
+            Text(
+                NSLocalizedString(
+                    "portfolio.empty_state.title",
+                    comment: "No Assets Found"
+                )
+            )
+            .font(.headline)
+
+            Text(
+                NSLocalizedString(
+                    "portfolio.empty_state.message",
+                    comment: "This wallet doesn't have any tokens or NFTs"
+                )
+            )
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.center)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)

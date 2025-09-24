@@ -9,16 +9,16 @@ NC='\033[0m' # No Color
 echo -e "${YELLOW}🔍 Checking for staged changes...${NC}"
 # Check if there are staged changes
 if [ -z "$(git diff --staged)" ]; then
-    echo -e "${RED}❌ No staged changes found. Please stage some changes first.${NC}"
-    exit 1
+echo -e "${RED}❌ No staged changes found. Please stage some changes first.${NC}"
+exit 1
 fi
 echo -e "${GREEN}✓ Found staged changes${NC}"
 
 echo -e "${YELLOW}🔧 Checking Claude Code installation...${NC}"
 # Check if claude command exists
 if ! command -v claude &> /dev/null; then
-    echo -e "${RED}❌ Claude Code is not installed or not in PATH${NC}"
-    exit 1
+echo -e "${RED}❌ Claude Code is not installed or not in PATH${NC}"
+exit 1
 fi
 echo -e "${GREEN}✓ Claude Code is available${NC}"
 
@@ -58,15 +58,15 @@ Output ONLY the commit message in the exact format requested, nothing else. No e
 
 # Check if Claude returned an error
 if [ $? -ne 0 ]; then
-    echo -e "${RED}❌ Error: Failed to generate commit message${NC}"
-    echo -e "${RED}Claude output: $COMMIT_MSG${NC}"
-    exit 1
+echo -e "${RED}❌ Error: Failed to generate commit message${NC}"
+echo -e "${RED}Claude output: $COMMIT_MSG${NC}"
+exit 1
 fi
 
 # Check if commit message is empty
 if [ -z "$COMMIT_MSG" ]; then
-    echo -e "${RED}❌ Error: Generated commit message is empty${NC}"
-    exit 1
+echo -e "${RED}❌ Error: Generated commit message is empty${NC}"
+exit 1
 fi
 
 echo -e "${GREEN}✓ Commit message generated successfully${NC}"
@@ -92,35 +92,35 @@ read -p "$(echo -e ${GREEN}Your choice: ${NC})" -n 1 -r CHOICE
 echo
 
 case $CHOICE in
-    [Yy])
-        echo -e "${YELLOW}💾 Creating commit...${NC}"
-        git commit -m "$COMMIT_MSG"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}✨ Commit created successfully!${NC}"
-        else
-            echo -e "${RED}❌ Error: Failed to create commit${NC}"
-            exit 1
-        fi
-        ;;
-    [Ee])
-        echo -e "${YELLOW}📝 Opening editor for commit message...${NC}"
-        # Save to temp file and open in git's default editor
-        TEMP_FILE=$(mktemp)
-        echo "$COMMIT_MSG" > "$TEMP_FILE"
-        git commit -e -F "$TEMP_FILE"
-        rm "$TEMP_FILE"
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}✨ Commit created successfully with edits!${NC}"
-        else
-            echo -e "${RED}❌ Error: Failed to create commit or commit was cancelled${NC}"
-            exit 1
-        fi
-        ;;
-    [Rr])
-        echo -e "${YELLOW}🔄 Regenerating...${NC}"
-        exec "$0"
-        ;;
-    *)
-        echo -e "${YELLOW}❌ Commit cancelled${NC}"
-        ;;
+[Yy])
+echo -e "${YELLOW}💾 Creating commit...${NC}"
+git commit -m "$COMMIT_MSG"
+if [ $? -eq 0 ]; then
+echo -e "${GREEN}✨ Commit created successfully!${NC}"
+else
+echo -e "${RED}❌ Error: Failed to create commit${NC}"
+exit 1
+fi
+;;
+[Ee])
+echo -e "${YELLOW}📝 Opening editor for commit message...${NC}"
+# Save to temp file and open in git's default editor
+TEMP_FILE=$(mktemp)
+echo "$COMMIT_MSG" > "$TEMP_FILE"
+git commit -e -F "$TEMP_FILE"
+rm "$TEMP_FILE"
+if [ $? -eq 0 ]; then
+echo -e "${GREEN}✨ Commit created successfully with edits!${NC}"
+else
+echo -e "${RED}❌ Error: Failed to create commit or commit was cancelled${NC}"
+exit 1
+fi
+;;
+[Rr])
+echo -e "${YELLOW}🔄 Regenerating...${NC}"
+exec "$0"
+;;
+*)
+echo -e "${YELLOW}❌ Commit cancelled${NC}"
+;;
 esac

@@ -71,9 +71,9 @@ cat <<'APIDOC' > "$DOCS_DIR/API_KEY_SETUP.md"
 ## Quick Start
 1. Get API key from [Alchemy Dashboard](https://dashboard.alchemy.com/)
 2. Add to `Configuration/Secrets.xcconfig`:
-   ```
-   ALCHEMY_API_KEY = your_key_here
-   ```
+```
+ALCHEMY_API_KEY = your_key_here
+```
 
 ## Configuration Methods
 
@@ -110,10 +110,10 @@ We optimize for:
 ```
 Features/
 └── FeatureName/
-    ├── Domain/       # Business logic
-    ├── Data/         # API/Database
-    ├── Presentation/ # Views/ViewModels
-    └── Coordinator/  # Navigation
+├── Domain/       # Business logic
+├── Data/         # API/Database
+├── Presentation/ # Views/ViewModels
+└── Coordinator/  # Navigation
 ```
 
 ### Creating Features

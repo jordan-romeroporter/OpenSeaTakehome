@@ -2,11 +2,11 @@ import SwiftUI
 
 struct PortfolioCoordinator {
     private let container: DependencyContainer
-    
+
     init(container: DependencyContainer) {
         self.container = container
     }
-    
+
     @MainActor
     func start() -> some View {
         let viewModel = PortfolioViewModel(

@@ -12,34 +12,34 @@ printf '%s\n' "🚀 Portfolio App Developer Tools Installer" "==================
 
 # Detect shell
 if [ -n "${ZSH_VERSION-}" ]; then
-    SHELL_RC="$HOME/.zshrc"
-    SHELL_NAME="zsh"
+SHELL_RC="$HOME/.zshrc"
+SHELL_NAME="zsh"
 elif [ -n "${BASH_VERSION-}" ]; then
-    SHELL_RC="$HOME/.bashrc"
-    SHELL_NAME="bash"
+SHELL_RC="$HOME/.bashrc"
+SHELL_NAME="bash"
 else
-    echo "❌ Unsupported shell. Please manually add aliases."
-    exit 1
+echo "❌ Unsupported shell. Please manually add aliases."
+exit 1
 fi
 
 printf '%s\n' "📋 Detected shell: $SHELL_NAME" "📝 Config file: $SHELL_RC"
 
 # Check if aliases already exist
 if grep -q "Portfolio App Developer Tools" "$SHELL_RC" 2>/dev/null; then
-    cat <<'EOM'
+cat <<'EOM'
 ✅ Aliases already installed!
 
 Available commands:
-  pf-commit  - AI-powered commit messages
-  pf-feature - Create new feature module
-  pf-audit   - Run accessibility audit
-  pf-docs    - Generate documentation
-  pf-setup   - Initial project setup
-  pf-test    - Run Swift tests
-  pf-build   - Build project
-  pf-clean   - Clean build
+pf-commit  - AI-powered commit messages
+pf-feature - Create new feature module
+pf-audit   - Run accessibility audit
+pf-docs    - Generate documentation
+pf-setup   - Initial project setup
+pf-test    - Run Swift tests
+pf-build   - Build project
+pf-clean   - Clean build
 EOM
-    exit 0
+exit 0
 fi
 
 {
@@ -84,33 +84,33 @@ cat <<'INFO'
 
 🎯 Available commands:
 
-  Core Tools:
-    pf-commit    - AI-powered commit messages
-    pf-feature   - Create new feature module
-    pf-audit     - Run accessibility audit
-    pf-docs      - Generate documentation
-    pf-setup     - Initial project setup
+Core Tools:
+pf-commit    - AI-powered commit messages
+pf-feature   - Create new feature module
+pf-audit     - Run accessibility audit
+pf-docs      - Generate documentation
+pf-setup     - Initial project setup
 
-  Build & Test:
-    pf-test      - Run Swift tests
-    pf-build     - Build project
-    pf-clean     - Clean build
-    pf-run       - Build and run in simulator
-    pf-coverage  - Generate test coverage
+Build & Test:
+pf-test      - Run Swift tests
+pf-build     - Build project
+pf-clean     - Clean build
+pf-run       - Build and run in simulator
+pf-coverage  - Generate test coverage
 
-  Code Quality:
-    pf-lint      - Run SwiftLint
-    pf-format    - Auto-fix linting issues
-    pf-profile   - Run performance profiler
+Code Quality:
+pf-lint      - Run SwiftLint
+pf-format    - Auto-fix linting issues
+pf-profile   - Run performance profiler
 
-  Git Workflow:
-    pf-pr        - Create pull request
-    pf-sync      - Sync with main branch
-    pf-branch    - Create new branch
+Git Workflow:
+pf-pr        - Create pull request
+pf-sync      - Sync with main branch
+pf-branch    - Create new branch
 
-  Navigation:
-    pf-cd        - Navigate to project
-    pf-open      - Open in Xcode
+Navigation:
+pf-cd        - Navigate to project
+pf-open      - Open in Xcode
 
 📌 To activate now, run: source $SHELL_RC
 📚 Or restart your terminal
@@ -119,7 +119,7 @@ INFO
 read -p "Would you like to activate aliases now? (y/n): " -n 1 -r
 printf '\n'
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    # shellcheck disable=SC1090
-    source "$SHELL_RC"
-    echo "✨ Aliases activated! Try 'pf-' and hit TAB for autocomplete"
+# shellcheck disable=SC1090
+source "$SHELL_RC"
+echo "✨ Aliases activated! Try 'pf-' and hit TAB for autocomplete"
 fi

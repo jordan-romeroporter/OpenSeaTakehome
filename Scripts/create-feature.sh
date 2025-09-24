@@ -6,8 +6,8 @@ set -euo pipefail
 
 FEATURE_NAME=${1-}
 if [ -z "$FEATURE_NAME" ]; then
-    echo "Usage: ./create-feature.sh <FeatureName>"
-    exit 1
+echo "Usage: ./create-feature.sh <FeatureName>"
+exit 1
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -18,8 +18,8 @@ TESTS_ROOT="$PROJECT_DIR/OpenSeaTakehomeTests"
 FEATURE_DIR="$FEATURES_ROOT/$FEATURE_NAME"
 
 if [ -d "$FEATURE_DIR" ]; then
-    echo "Feature $FEATURE_NAME already exists at $FEATURE_DIR"
-    exit 1
+echo "Feature $FEATURE_NAME already exists at $FEATURE_DIR"
+exit 1
 fi
 
 echo "🚀 Creating feature: $FEATURE_NAME"
@@ -27,10 +27,10 @@ echo "🚀 Creating feature: $FEATURE_NAME"
 FOLDER_NAME=$(echo "$FEATURE_NAME" | sed 's/\([A-Z]\)/_\1/g' | sed 's/^_//' | tr '[:upper:]' '[:lower:]')
 
 mkdir -p "$FEATURE_DIR/Domain" \
-         "$FEATURE_DIR/Data" \
-         "$FEATURE_DIR/Presentation" \
-         "$FEATURE_DIR/Presentation/Components" \
-         "$FEATURE_DIR/Coordinator"
+"$FEATURE_DIR/Data" \
+"$FEATURE_DIR/Presentation" \
+"$FEATURE_DIR/Presentation/Components" \
+"$FEATURE_DIR/Coordinator"
 
 cat <<DOMAIN > "$FEATURE_DIR/Domain/${FEATURE_NAME}Models.swift"
 import Foundation
@@ -116,16 +116,16 @@ struct ${FEATURE_NAME}View: View {
     var body: some View {
         Group {
             switch viewModel.state {
-            case .idle:
+                case .idle:
                 Color.clear.onAppear {
                     Task { await viewModel.load() }
                 }
-            case .loading:
+                case .loading:
                 ProgressView()
-                    .accessibilityLabel(NSLocalizedString("accessibility.loading", comment: "Loading"))
-            case .loaded:
+                .accessibilityLabel(NSLocalizedString("accessibility.loading", comment: "Loading"))
+                case .loaded:
                 content
-            case .error(let error):
+                case .error(let error):
                 ErrorView(error: error) {
                     Task { await viewModel.load() }
                 }
@@ -153,7 +153,7 @@ struct ${FEATURE_NAME}Coordinator {
     @MainActor
     func start() -> some View {
         let viewModel = ${FEATURE_NAME}ViewModel(
-            service: container.resolve(${FEATURE_NAME}Service.self)
+        service: container.resolve(${FEATURE_NAME}Service.self)
         )
         return ${FEATURE_NAME}View(viewModel: viewModel)
     }
@@ -196,11 +196,11 @@ final class Mock${FEATURE_NAME}Service: ${FEATURE_NAME}Service {
     
     func fetch() async throws -> ${FEATURE_NAME}Model {
         switch mockResult {
-        case .success(let model):
+            case .success(let model):
             return model
-        case .failure(let error):
+            case .failure(let error):
             throw error
-        case .none:
+            case .none:
             throw NSError(domain: "Test", code: 0)
         }
     }

@@ -1,5 +1,7 @@
 import Foundation
 
+// swiftlint:disable file_length nesting
+
 // MARK: - Request Models
 struct TokensRequest: Encodable {
     let addresses: [AddressNetworkPair]
@@ -8,17 +10,20 @@ struct TokensRequest: Encodable {
     let includeNativeTokens: Bool = true
     let includeErc20Tokens: Bool = true
     let pageKey: String?
-    
+
     struct AddressNetworkPair: Encodable {
         let address: String
         let networks: [String]
     }
-    
-    init(address: String, networks: [SupportedNetwork], pageKey: String? = nil) {
-        self.addresses = [AddressNetworkPair(
-            address: address,
-            networks: networks.map { $0.rawValue }
-        )]
+
+    init(address: String, networks: [SupportedNetwork], pageKey: String? = nil)
+    {
+        self.addresses = [
+            AddressNetworkPair(
+                address: address,
+                networks: networks.map { $0.rawValue }
+            )
+        ]
         self.pageKey = pageKey
     }
 }
@@ -28,17 +33,20 @@ struct NFTContractsRequest: Encodable {
     let withMetadata: Bool = true
     let pageKey: String?
     let pageSize: Int = 100
-    
+
     struct AddressNetworkPair: Encodable {
         let address: String
         let networks: [String]
     }
-    
-    init(address: String, networks: [SupportedNetwork], pageKey: String? = nil) {
-        self.addresses = [AddressNetworkPair(
-            address: address,
-            networks: networks.map { $0.rawValue }
-        )]
+
+    init(address: String, networks: [SupportedNetwork], pageKey: String? = nil)
+    {
+        self.addresses = [
+            AddressNetworkPair(
+                address: address,
+                networks: networks.map { $0.rawValue }
+            )
+        ]
         self.pageKey = pageKey
     }
 }
@@ -90,7 +98,8 @@ struct TokensResponse: Decodable {
                         String.self,
                         DecodingError.Context(
                             codingPath: decoder.codingPath,
-                            debugDescription: "Unsupported token price value type"
+                            debugDescription:
+                                "Unsupported token price value type"
                         )
                     )
                 }
@@ -116,11 +125,15 @@ extension TokensResponse {
     }
 }
 
-private extension TokensResponse.TokenDTO {
-    func toDomainToken() -> Token {
+extension TokensResponse.TokenDTO {
+    fileprivate func toDomainToken() -> Token {
         let rawBalance = Self.hexToDecimalString(tokenBalance)
-        let resolvedDecimals = tokenMetadata?.decimals ?? (tokenAddress == nil ? 18 : nil)
-        let normalizedBalance = Self.normalizedBalance(from: rawBalance, decimals: resolvedDecimals)
+        let resolvedDecimals =
+            tokenMetadata?.decimals ?? (tokenAddress == nil ? 18 : nil)
+        let normalizedBalance = Self.normalizedBalance(
+            from: rawBalance,
+            decimals: resolvedDecimals
+        )
 
         let usdPrice = (tokenPrices ?? [])
             .first { $0.currency.lowercased() == "usd" }
@@ -145,7 +158,10 @@ private extension TokensResponse.TokenDTO {
         )
     }
 
-    static func normalizedBalance(from decimalString: String?, decimals: Int?) -> Double? {
+    fileprivate static func normalizedBalance(
+        from decimalString: String?,
+        decimals: Int?
+    ) -> Double? {
         guard let decimalString, !decimalString.isEmpty else { return nil }
 
         guard let baseValue = doubleFromDecimalString(decimalString) else {
@@ -160,7 +176,8 @@ private extension TokensResponse.TokenDTO {
         return baseValue / divisor
     }
 
-    static func doubleFromDecimalString(_ value: String) -> Double? {
+    fileprivate static func doubleFromDecimalString(_ value: String) -> Double?
+    {
         var result = 0.0
         for character in value {
             guard let digit = character.wholeNumberValue else { return nil }
@@ -169,7 +186,8 @@ private extension TokensResponse.TokenDTO {
         return result
     }
 
-    static func hexToDecimalString(_ hexString: String?) -> String? {
+    fileprivate static func hexToDecimalString(_ hexString: String?) -> String?
+    {
         guard var hex = hexString?.lowercased() else { return nil }
         if hex.hasPrefix("0x") {
             hex.removeFirst(2)
@@ -186,7 +204,10 @@ private extension TokensResponse.TokenDTO {
         return decimal
     }
 
-    static func multiplyDecimalString(_ number: String, by multiplier: Int) -> String {
+    fileprivate static func multiplyDecimalString(
+        _ number: String,
+        by multiplier: Int
+    ) -> String {
         guard multiplier != 0 else { return "0" }
 
         var carry = 0
@@ -207,7 +228,9 @@ private extension TokensResponse.TokenDTO {
         return String(result.reversed()).trimmingLeadingZeros()
     }
 
-    static func addDecimalString(_ number: String, _ addend: Int) -> String {
+    fileprivate static func addDecimalString(_ number: String, _ addend: Int)
+        -> String
+    {
         var carry = addend
         var result: [Character] = []
         for character in number.reversed() {
@@ -227,8 +250,8 @@ private extension TokensResponse.TokenDTO {
     }
 }
 
-private extension String {
-    func trimmingLeadingZeros() -> String {
+extension String {
+    fileprivate func trimmingLeadingZeros() -> String {
         let trimmed = drop { $0 == "0" }
         return trimmed.isEmpty ? "0" : String(trimmed)
     }
@@ -329,10 +352,11 @@ extension NFTContractsResponse {
     }
 }
 
-private extension NFTContractsResponse.ContractDTO {
-    func toDomainContract() -> NFTContract? {
+extension NFTContractsResponse.ContractDTO {
+    fileprivate func toDomainContract() -> NFTContract? {
         guard let details = contract,
-              let contractAddress = details.address else {
+            let contractAddress = details.address
+        else {
             return nil
         }
 
@@ -343,7 +367,9 @@ private extension NFTContractsResponse.ContractDTO {
             tokenType: details.tokenType,
             totalSupply: details.totalSupply,
             totalBalance: Self.intValue(from: details.totalBalance),
-            numDistinctTokensOwned: Self.intValue(from: details.numDistinctTokensOwned),
+            numDistinctTokensOwned: Self.intValue(
+                from: details.numDistinctTokensOwned
+            ),
             contractDeployer: details.contractDeployer,
             deployedBlockNumber: details.deployedBlockNumber,
             isSpam: details.isSpam?.boolValue,
@@ -353,14 +379,16 @@ private extension NFTContractsResponse.ContractDTO {
         )
     }
 
-    static func intValue(from string: String?) -> Int? {
+    fileprivate static func intValue(from string: String?) -> Int? {
         guard let string else { return nil }
         return Int(string)
     }
 }
 
-private extension NFTMedia {
-    init(dto: NFTContractsResponse.ContractDTO.ContractDetailsDTO.NFTMediaDTO) {
+extension NFTMedia {
+    fileprivate init(
+        dto: NFTContractsResponse.ContractDTO.ContractDetailsDTO.NFTMediaDTO
+    ) {
         self.init(
             collectionBannerImageUrl: dto.collectionBannerImageUrl,
             collectionImageUrl: dto.collectionImageUrl
@@ -368,8 +396,10 @@ private extension NFTMedia {
     }
 }
 
-private extension OpenSeaMetadata {
-    init(dto: NFTContractsResponse.ContractDTO.ContractDetailsDTO.OpenSeaDTO) {
+extension OpenSeaMetadata {
+    fileprivate init(
+        dto: NFTContractsResponse.ContractDTO.ContractDetailsDTO.OpenSeaDTO
+    ) {
         self.init(
             collectionName: dto.collectionName,
             description: dto.description,
@@ -399,11 +429,11 @@ struct Token: Identifiable, Equatable {
     let price: Double?
     let priceChange: PriceChange?
     let isSpam: Bool?
-    
+
     var displayName: String {
         name ?? symbol ?? "Unknown Token"
     }
-    
+
     var isNativeToken: Bool {
         contractAddress == nil
     }
@@ -430,7 +460,7 @@ struct NFTContract: Identifiable, Codable, Equatable {
     let spamClassifications: [String]?
     let media: NFTMedia?
     let opensea: OpenSeaMetadata?
-    
+
     private enum CodingKeys: String, CodingKey {
         case contractAddress, name, symbol, tokenType
         case totalSupply, totalBalance, numDistinctTokensOwned
@@ -438,7 +468,7 @@ struct NFTContract: Identifiable, Codable, Equatable {
         case isSpam, spamClassifications
         case media, opensea
     }
-    
+
     var displayName: String {
         name ?? contractAddress
     }

@@ -4,29 +4,29 @@ enum SupportedNetwork: String, CaseIterable, Identifiable {
     // Ethereum
     case ethereumMainnet = "eth-mainnet"
     case ethereumSepolia = "eth-sepolia"
-    
+
     // Polygon
     case polygonMainnet = "polygon-mainnet"
     case polygonAmoy = "polygon-amoy"
-    
+
     // Optimism
     case optimismMainnet = "opt-mainnet"
     case optimismSepolia = "opt-sepolia"
-    
+
     // Arbitrum
     case arbitrumMainnet = "arb-mainnet"
     case arbitrumSepolia = "arb-sepolia"
-    
+
     // Base
     case baseMainnet = "base-mainnet"
     case baseSepolia = "base-sepolia"
-    
+
     // Solana
     case solanaMainnet = "solana-mainnet"
     case solanaDevnet = "solana-devnet"
-    
+
     var id: String { rawValue }
-    
+
     var displayName: String {
         switch self {
         case .ethereumMainnet: return "Ethereum"
@@ -43,7 +43,7 @@ enum SupportedNetwork: String, CaseIterable, Identifiable {
         case .solanaDevnet: return "Solana Devnet"
         }
     }
-    
+
     var chainIcon: String {
         switch self {
         case .ethereumMainnet, .ethereumSepolia: return "🔷"
@@ -54,11 +54,11 @@ enum SupportedNetwork: String, CaseIterable, Identifiable {
         case .solanaMainnet, .solanaDevnet: return "☀️"
         }
     }
-    
+
     var isTestnet: Bool {
         switch self {
         case .ethereumSepolia, .polygonAmoy, .optimismSepolia,
-             .arbitrumSepolia, .baseSepolia, .solanaDevnet:
+            .arbitrumSepolia, .baseSepolia, .solanaDevnet:
             return true
         default:
             return false
