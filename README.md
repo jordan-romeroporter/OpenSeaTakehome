@@ -15,7 +15,7 @@ Staff-level iOS architecture demonstration with developer velocity tools and sca
    ```
 3. **Configure API key**
    ```bash
-   echo "ALCHEMY_API_KEY = your_key_here" > Config.xcconfig
+   echo "ALCHEMY_API_KEY = your_key_here" > Secrets.xcconfig
    ```
 4. **Open in Xcode**
    ```bash
@@ -95,33 +95,6 @@ OpenSeaTakehome/
 └── Resources/              # Localized strings, assets, etc.
 ```
 
-## 🧪 Testing Strategy
-
-**Modern Swift Testing Framework**
-
-```swift
-@Test("User can load portfolio")
-func loadPortfolio() async {
-    await viewModel.loadPortfolio()
-    #expect(viewModel.tokens.count > 0)
-}
-```
-
-**Test Coverage Goals**
-- Unit Tests: >80% coverage
-- Integration Tests: API layer
-- UI Tests: Critical user paths
-- Accessibility Tests: 100% compliance
-
-## 🔑 API Configuration
-
-**Environment-Based Setup**
-1. Development: Uses .xcconfig file
-2. CI/CD: Environment variables
-3. Production: Keychain storage
-
-See `Documentation/API_KEY_SETUP.md` for detailed configuration.
-
 ## 📚 Documentation
 
 - Architecture Decision Records
@@ -138,13 +111,6 @@ See `Documentation/API_KEY_SETUP.md` for detailed configuration.
 - ✅ Comprehensive error handling
 - ✅ Full accessibility support
 - ✅ Localization ready
-
-**Roadmap**
-- 📱 Multi-wallet support
-- 📊 Portfolio analytics
-- 🔄 Real-time updates
-- 💾 Offline mode
-- 📈 Historical tracking
 
 ## 🤝 Contributing
 
@@ -172,47 +138,4 @@ pf-test
 - [ ] No hardcoded values
 - [ ] Documentation updated
 
-## 📊 Metrics
-
-**Developer Velocity**
-- Feature Cycle Time: 2-3 days
-- PR Review Time: <4 hours
-- Build Time: <2 minutes
-- Test Execution: <30 seconds
-
-**Code Quality**
-- SwiftLint: Zero violations
-- Test Coverage: >80%
-- Crash Rate: <0.1%
-- Performance: 60fps
-
-## 🚦 CI/CD
-
-GitHub Actions workflow:
-1. Lint: SwiftLint validation
-2. Test: Unit & UI tests
-3. Audit: Accessibility check
-4. Build: Debug & Release
-5. Deploy: TestFlight (on main)
-
-## 📱 Requirements
-
-- iOS: 16.0+
-- Xcode: 15.0+
-- Swift: 5.9+
-- macOS: 13.0+ (for development)
-
-## 📄 License
-
-MIT License
-
-## 🙋‍♂️ Support
-
-For questions or issues:
-1. Check Documentation
-2. Search Issues
-3. Contact team lead
-
----
-
-Built with ❤️ by Jordan Romero Porter – Demonstrating Staff-level iOS engineering
+Built with ❤️ by Jordan Romero Porter
