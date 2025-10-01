@@ -90,11 +90,6 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		FA72236F2E84703B00AAA68B /* Docs */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Docs;
-			sourceTree = "<group>";
-		};
 		FA7223702E8470B100AAA68B /* Scripts */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -134,7 +129,6 @@
 			isa = PBXGroup;
 			children = (
 				FA7223702E8470B100AAA68B /* Scripts */,
-				FA72236F2E84703B00AAA68B /* Docs */,
 				FA7223642E846AC700AAA68B /* Resources */,
 				FA72235C2E846A0500AAA68B /* DesignSystem */,
 				FA7223362E8464B400AAA68B /* Core */,
@@ -177,7 +171,6 @@
 				FA7223362E8464B400AAA68B /* Core */,
 				FA72235C2E846A0500AAA68B /* DesignSystem */,
 				FA7223642E846AC700AAA68B /* Resources */,
-				FA72236F2E84703B00AAA68B /* Docs */,
 				FA7223702E8470B100AAA68B /* Scripts */,
 			);
 			name = OpenSeaTakehome;
